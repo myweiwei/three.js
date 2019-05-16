@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src='js/three.js'></script>
+    <style> 
+        #canvas-frame{
+            width:500px;
+            height:500px;
+            margin:0 auto;
+        }
+    </style>
+    <script>
+        var renderer;
+        var width;
+        var height;
+        function initThree(){
+            width=document.getElementById('canvas-frame').clientWidth;
+            height=document.getElementById('canvas-frame').clientHeight;
+            renderer = new THREE.WebGLRenderer({antialias:true});
+            renderer.setSize(width, height);
+            document.getElementById('canvas-frame').appendChild(renderer.domElement);
+            renderer.setClearColor(0x00FFFF, 1.0);
+        }
+        var camera;
+        function initCamera(){
+            camera=new THREE.PerspectiveCamera(45,width/height,10,10000);
+            camera.position.y=100;
+            camera.position.x=100;
+            camera.position.z=100;
+            camera.up.x = 0;
+            camera.up.y = 1;
+            camera.up.z = 0;
+            camera.lookAt({
+                x : 0,
+                y : 0,
+                z : 0
+            });
+        }
+        var scene;
+        var axisHelper;
+        function initScene(){
+            scene=new THREE.Scene();
+            axisHelper=new THREE.AxisHelper(104); 
+            scene.add(axisHelper);
+        }
+        var cube;
+        function initYuanzhu(){
+            cube=new THREE.CylinderGeometry(15, 15 ,40 ,40 ,40);
+            var cylinderMat = new THREE.MeshLambertMaterial({//创建材料
+                color:0xFF0000
+            });
+            // cube.position.x = -4;
+            // cube.position.y = 3;
+            // cube.position.z = 0;
+            //创建圆柱体网格模型
+            var cylinderMesh = new THREE.Mesh(cube, cylinderMat);
+            cylinderMesh.position.set(0, 20, -40);//设置圆柱坐标
+            scene.add(cylinderMesh);//向场景添加圆柱体
+        
+        }
+        var light;
+        function initLight() { 
+            light = new THREE.DirectionalLight(0xff0000, 1.0, 0);//设置平行光源
+            light.position.set( 200, 200, 200 );//设置光源向量
+            scene.add(light);// 追加光源到场景
+        }
+        
+        function render()
+        {
+            renderer.clear();
+            
+            //axisHelper.rotation.x+=0.01;
+            renderer.render(scene, camera);
+            //cube.rotation.x+=0.01;
+            requestAnimationFrame(render);
+        }
+        function threeStart(){
+            
+            initThree();
+            initCamera();
+            initScene();
+            initYuanzhu();
+            initLight();
+           
+            render();
+        }
+    </script>
+</head>
+<body onload="threeStart();">
+    <div id="canvas-frame"></div>
+</body>
+</html>

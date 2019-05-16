@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style>canvas { width: 100%; height: 100% }</style>
+    <script src="js/three.js"></script>
+    <script src='js/stats.js'></script>
+    <script src="js/tween.min.js"></script>
+    <script src='js/dat.gui.js'></script>
+</head>
+<body>
+    <div id='box'></div>
+    <script>
+        //场景
+        var scene = new THREE.Scene();
+		//相机 
+        var camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+		//渲染
+        var renderer = new THREE.WebGLRenderer();
+        //新建一个放坐标系和立方体 为了让本地坐标系和物体同时旋转
+		var objectTotal=new THREE.Object3D();
+
+        renderer.setSize(window.innerWidth, window.innerHeight);
+		
+        document.body.appendChild(renderer.domElement);
+        renderer.setClearColor('rgb(135,206,250)',1.0);
+        //立方体
+        var geometry = new THREE.CubeGeometry(1,1,1);
+        //材质
+        var material = new THREE.MeshBasicMaterial({color: 0x00ff00});
+        //网格
+        var cube = new THREE.Mesh(geometry, material); 
+        // scene.add(cube);
+        objectTotal.add(cube);
+
+        var axisHelper=new THREE.AxisHelper(4); 
+        // scene.add(axisHelper);
+        objectTotal.add(axisHelper);
+
+        scene.add(objectTotal);
+
+        //定义一个stats,用来监听帧
+        var stats=new Stats();
+        stats.domElement.style.position='absolute';
+        stats.domElement.style.left='10px';
+        stats.domElement.style.top='10px';
+        document.body.appendChild(stats.domElement);
+        //tween 动画
+        //https://github.com/fuyz/tween.js
+        //var tween =new TWEEN.Tween(camera.position).to({x:100},3000).repeat(3).start();
+        var ParamObj=function(){
+            this.fov=75;
+        }
+        var params=new ParamObj();
+        var gui=new dat.GUI();
+
+        gui.add(params,"fov",0,180).name('微微我');
+
+        //相机位置
+        camera.position.z = 5;
+        function render() {
+            requestAnimationFrame(render);
+            //移动自身
+            //cube.rotation.x += 0.01;
+            //移动坐标
+            // axisHelper.rotation.y+=0.01;
+            // axisHelper.rotation.x+=0.01;
+            //移动相机使运动
+            //camera.position.x+=0.01;
+            //移动自身（和坐标一起）
+            //objectTotal.rotation.y += 0.01;
+
+            TWEEN.update();
+            //stats.update();
+            renderer.render(scene, camera);
+        }
+        render();
+    </script>
+</body>
+</html>
